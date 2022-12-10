@@ -89,11 +89,7 @@ if ( ! class_exists( 'SportsPress_Advanced_H2H' ) ) :
 		public function add_settings( $settings ) {
 			  foreach ( $settings as $key => $setting ) {
 				  if ( $setting['id'] === 'sportspress_table_tiebreaker' ) {
-					  $setting['options'] = array(
-								'none' => esc_attr__( 'None', 'sportspress' ),
-								'h2h'  => esc_attr__( 'Head to head', 'sportspress' ),
-								'h2h-adv'  => esc_attr__( 'Advanced Head to head', 'sportspress-advanced-h2h' ),
-							);
+					  $setting['options']['h2h-adv'] = esc_attr__( 'Advanced Head to head', 'sportspress-advanced-h2h' );
 				  }
 				  $newsettings[$key] = $setting;
 			  }
