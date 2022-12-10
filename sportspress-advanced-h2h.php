@@ -48,6 +48,9 @@ if ( ! class_exists( 'SportsPress_Advanced_H2H' ) ) :
 
 			// Include required files.
 			$this->includes();
+			
+			//Filters
+			add_filter( 'sportspress_table_options', array( $this, 'add_settings' ) );
 
 
 		}
@@ -76,6 +79,26 @@ if ( ! class_exists( 'SportsPress_Advanced_H2H' ) ) :
 		private function includes() {
 			// load the needed scripts and styles.
 			//include SAH2H_PLUGIN_DIR . '/includes/class-SAH2H-scripts.php';
+		}
+		
+		/**
+		 * Add settings.
+		 *
+		 * @return array
+		 */
+		public function add_settings( $settings ) {
+			  foreach ( $settings as $key => $setting ) {
+				  if ( $setting['id'] === 'sportspress_table_tiebreaker' ) {
+					  $setting['options'] = array(
+								'none' => esc_attr__( 'None', 'sportspress' ),
+								'h2h'  => esc_attr__( 'Head to head', 'sportspress' ),
+								'h2h-adv'  => esc_attr__( 'Advanced Head to head', 'sportspress-advanced-h2h' ),
+							);
+				  }
+				  $newsettings[$key] = $setting;
+			  }
+
+			  return $newsettings;
 		}
 
 	}
