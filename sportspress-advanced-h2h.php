@@ -56,6 +56,7 @@ if ( ! class_exists( 'SportsPress_Advanced_H2H' ) ) :
 			//Actions
 			add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 30 );
 			add_action( 'sportspress_process_sp_column_meta', array( $this, 'save' ), 15, 2 );
+			add_action( 'admin_enqueue_scripts', array( $this, 'h2h_admin_enqueue_assets' ), -99 );
 
 
 		}
@@ -107,52 +108,63 @@ if ( ! class_exists( 'SportsPress_Advanced_H2H' ) ) :
 		 */
 		 
 		public function add_meta_boxes() {
-		add_meta_box( 'h2h_h2hdiv', __( 'Advanced Head to Head', 'sportspress-advanced-h2h' ), array( $this, 'meta_box' ), 'sp_column', 'side', 'default' );
+		add_meta_box( 'h2h_h2hdiv', __( 'Advanced Head to Head', 'sportspress-advanced-h2h' ), array( $this, 'meta_box' ), 'sp_column', 'side', 'low' );
 		}
 		
-	/**
-	 * Output the meta box.
-	 */
-	public static function meta_box( $post ) {
-		$h2h_priority 	= get_post_meta( $post->ID, 'h2h_priority', true );
-		$h2h_order     	= get_post_meta( $post->ID, 'h2h_order', true );
-		?>
-		<p><strong><?php _e( 'H2H Sort Order', 'sportspress-advanced-h2h' ); ?></strong></p>
-		<p class="h2h-order-selector">
-			<select name="h2h_priority">
-				<?php
-				$options = array( '0' => esc_attr__( 'Disable', 'sportspress' ) );
-				$count   = wp_count_posts( 'sp_column' );
-				for ( $i = 1; $i <= $count->publish; $i++ ) :
-					$options[ $i ] = $i;
-				endfor;
-				foreach ( $options as $key => $value ) :
-					printf( '<option value="%s" %s>%s</option>', esc_attr( $key ), selected( true, $key == $h2h_priority, false ), esc_html( $value ) );
-				endforeach;
-				?>
-			</select>
-			<select name="h2h_order">
-				<?php
-				$options = array(
-					'DESC' => esc_attr__( 'Descending', 'sportspress' ),
-					'ASC'  => esc_attr__( 'Ascending', 'sportspress' ),
-				);
-				foreach ( $options as $key => $value ) :
-					printf( '<option value="%s" %s>%s</option>', esc_attr( $key ), selected( true, $key == $h2h_order, false ), esc_html( $value ) );
-				endforeach;
-				?>
-			</select>
-		</p>
-		<?php
-	}
+		/**
+		 * Output the meta box.
+		 */
+		public static function meta_box( $post ) {
+			$h2h_priority 	= get_post_meta( $post->ID, 'h2h_priority', true );
+			$h2h_order     	= get_post_meta( $post->ID, 'h2h_order', true );
+			
+			?>
+			<p><strong><?php _e( 'H2H Sort Order', 'sportspress-advanced-h2h' ); ?></strong></p>
+			<p class="h2h-order-selector">
+				<select name="h2h_priority">
+					<?php
+					$options = array( '0' => esc_attr__( 'Disable', 'sportspress' ) );
+					$count   = wp_count_posts( 'sp_column' );
+					for ( $i = 1; $i <= $count->publish; $i++ ) :
+						$options[ $i ] = $i;
+					endfor;
+					foreach ( $options as $key => $value ) :
+						printf( '<option value="%s" %s>%s</option>', esc_attr( $key ), selected( true, $key == $h2h_priority, false ), esc_html( $value ) );
+					endforeach;
+					?>
+				</select>
+				<select name="h2h_order">
+					<?php
+					$options = array(
+						'DESC' => esc_attr__( 'Descending', 'sportspress' ),
+						'ASC'  => esc_attr__( 'Ascending', 'sportspress' ),
+					);
+					foreach ( $options as $key => $value ) :
+						printf( '<option value="%s" %s>%s</option>', esc_attr( $key ), selected( true, $key == $h2h_order, false ), esc_html( $value ) );
+					endforeach;
+					?>
+				</select>
+			</p>
+			<?php
+		}
 	
-	/**
-	 * Save H2H Priorities and Order rules.
-	 */
-	public static function save( $post_id, $post ) {
-		update_post_meta( $post_id, 'h2h_priority', sp_array_value( $_POST, 'h2h_priority', '' ) );
-		update_post_meta( $post_id, 'h2h_order', sp_array_value( $_POST, 'h2h_order', '' ) );
-	}
+		/**
+		 * Save H2H Priorities and Order rules.
+		 */
+		public static function save( $post_id, $post ) {
+			update_post_meta( $post_id, 'h2h_priority', sp_array_value( $_POST, 'h2h_priority', '' ) );
+			update_post_meta( $post_id, 'h2h_order', sp_array_value( $_POST, 'h2h_order', '' ) );
+		}
+		
+		/**
+		 * Enqueue needed scripts to the admin site.
+		 */
+		public function h2h_admin_enqueue_assets( $hook_suffix ) {
+			$current_screen = get_current_screen();
+			if ( $current_screen && 'sp_column' == $current_screen->id ) {
+				wp_enqueue_script( 'h2h-admin', plugin_dir_url( __FILE__ ) . 'assets/js/h2h-admin.js', array(), '1.0.0' );
+			}
+		}
 
 	}
 
