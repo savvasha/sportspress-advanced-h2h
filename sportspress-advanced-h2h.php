@@ -20,14 +20,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! class_exists( 'SportsPress_Advanced_H2H' ) ) :
+if ( ! class_exists( 'Advanced_H2H_Main_Class' ) ) :
 
 	/**
-	 * Main SportsPress Advanced H2H Class
+	 * Main Advanced H2H Class
 	 *
-	 * @class SportsPress_Advanced_H2H
+	 * @class Advanced_H2H_Main_Class
 	 */
-	class SportsPress_Advanced_H2H {
+	class Advanced_H2H_Main_Class {
 
 		/**
 		 * The plugins mode.
@@ -51,7 +51,7 @@ if ( ! class_exists( 'SportsPress_Advanced_H2H' ) ) :
 			
 			//Filters
 			add_filter( 'sportspress_table_options', array( $this, 'add_settings' ) );
-			//add_filter( 'sportspress_meta_boxes', array( $this, 'add_meta_boxes' ) );
+			add_filter( 'sportspress_locate_template', array( $this, 'shortcode_override' ), 10, 3 );
 			
 			//Actions
 			add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 30 );
@@ -83,8 +83,8 @@ if ( ! class_exists( 'SportsPress_Advanced_H2H' ) ) :
 		 * Include required files
 		 */
 		private function includes() {
-			// load the needed scripts and styles.
-			//include SAH2H_PLUGIN_DIR . '/includes/class-SAH2H-scripts.php';
+			// load needed class functions.
+			include SAH2H_PLUGIN_DIR . 'includes/class-h2h-league-table.php';
 		}
 		
 		/**
@@ -101,6 +101,24 @@ if ( ! class_exists( 'SportsPress_Advanced_H2H' ) ) :
 			  }
 
 			  return $newsettings;
+		}
+		
+		/**
+		 * Shortcode override
+		 *
+		 * @param mixed $template The template path plus the name.
+		 * @param mixed $template_name The template name.
+		 * @param mixed $template_path The template path.
+		 * @return string
+		 */
+		public function shortcode_override( $template = null, $template_name = null, $template_path = null ) {
+
+			if ( 'league-table.php' === $template_name ) {
+				$template_path = SAH2H_PLUGIN_DIR . 'templates/';
+				$template      = $template_path . $template_name;
+			}
+
+			return $template;
 		}
 		
 		/**
@@ -170,4 +188,4 @@ if ( ! class_exists( 'SportsPress_Advanced_H2H' ) ) :
 
 endif;
 
-new SportsPress_Advanced_H2H();
+new Advanced_H2H_Main_Class();
