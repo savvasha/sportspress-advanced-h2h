@@ -18,6 +18,9 @@ if ( ! class_exists( 'SP_League_Table' ) ) {
 
 class H2H_League_Table extends SP_League_Table {
 
+	/** @var array The sort h2h priorities array. */
+	public $h2h_priorities;
+
 	/**
 	 * Returns formatted data
 	 *
@@ -620,6 +623,7 @@ endif;
 
 		$columns          = array();
 		$this->priorities = array();
+		$this->h2h_priorities = array();
 
 		foreach ( $stats as $stat ) :
 
@@ -641,12 +645,24 @@ endif;
 					'order'  => sp_array_value( sp_array_value( $meta, 'sp_order', array() ), 0, 'DESC' ),
 				);
 			endif;
+			
+			// Add order to h2h priorities if h2h priority is set and does not exist in array already
+			$h2h_priority = sp_array_value( sp_array_value( $meta, 'h2h_priority', array() ), 0, 0 );
+			if ( $h2h_priority && ! array_key_exists( $h2h_priority, $this->h2h_priorities ) ) :
+				$this->h2h_priorities[ $h2h_priority ] = array(
+					'column' => $stat->post_name,
+					'order'  => sp_array_value( sp_array_value( $meta, 'h2h_order', array() ), 0, 'DESC' ),
+				);
+			endif;
 
 		endforeach;
 
 		// Sort priorities in descending order
 		ksort( $this->priorities );
-
+		
+		// Sort h2h priorities in descending order
+		ksort( $this->h2h_priorities );
+var_dump($this->h2h_priorities);
 		// Initialize games back column variable
 		$gb_column = null;
 
