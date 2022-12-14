@@ -783,7 +783,15 @@ var_dump($this->h2h_priorities);
 
 		endforeach;
 
+		
 		uasort( $merged, array( $this, 'sort' ) );
+		
+		if ( ! $is_main_loop ) {
+			var_dump('this is not a main loop');
+			var_dump($merged);
+			uasort( $merged, array( $this, 'h2h_sort' ) );
+			var_dump($merged);
+		}
 
 		// Calculate position of teams for ties
 		foreach ( $merged as $team_id => $team_columns ) {
@@ -791,7 +799,7 @@ var_dump($this->h2h_priorities);
 		}
 
 		// Head to head table sorting
-		if ( $is_main_loop && 'h2h' == get_option( 'sportspress_table_tiebreaker', 'none' ) ) {
+		if ( $is_main_loop && in_array( get_option( 'sportspress_table_tiebreaker', 'none' ), array('h2h', 'h2h-adv') ) ) {
 			$order = array();
 
 			foreach ( $this->tiebreakers as $pos => $teams ) {
@@ -873,6 +881,39 @@ var_dump($this->h2h_priorities);
 
 		// Loop through priorities
 		foreach ( $this->priorities as $priority ) :
+
+			// Proceed if columns are not equal
+			if ( sp_array_value( $a, $priority['column'], 0 ) != sp_array_value( $b, $priority['column'], 0 ) ) :
+
+				// Compare column values
+				$output = (float) sp_array_value( $a, $priority['column'], 0 ) - (float) sp_array_value( $b, $priority['column'], 0 );
+
+				// Flip value if descending order
+				if ( $priority['order'] == 'DESC' ) {
+					$output = 0 - $output;
+				}
+
+				return ( $output > 0 ? 1 : -1 );
+
+			endif;
+
+		endforeach;
+
+		// Default sort by alphabetical
+		return strcmp( sp_array_value( $a, 'name', '' ), sp_array_value( $b, 'name', '' ) );
+	}
+	
+	/**
+	 * Sort the table by h2h priorities.
+	 *
+	 * @param array $a
+	 * @param array $b
+	 * @return int
+	 */
+	public function h2h_sort( $a, $b ) {
+
+		// Loop through priorities
+		foreach ( $this->h2h_priorities as $priority ) :
 
 			// Proceed if columns are not equal
 			if ( sp_array_value( $a, $priority['column'], 0 ) != sp_array_value( $b, $priority['column'], 0 ) ) :
