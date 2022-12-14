@@ -51,7 +51,6 @@ if ( ! class_exists( 'Advanced_H2H_Main_Class' ) ) :
 			
 			//Filters
 			add_filter( 'sportspress_table_options', array( $this, 'add_settings' ) );
-			add_filter( 'sportspress_locate_template', array( $this, 'shortcode_override' ), 10, 3 );
 			
 			//Actions
 			add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 30 );
@@ -83,8 +82,12 @@ if ( ! class_exists( 'Advanced_H2H_Main_Class' ) ) :
 		 * Include required files
 		 */
 		private function includes() {
-			// load needed class functions.
-			include SAH2H_PLUGIN_DIR . 'includes/class-h2h-league-table.php';
+			if ( 'h2h-adv' == get_option( 'sportspress_table_tiebreaker', 'none' ) ) {
+				// load needed class functions.
+				include SAH2H_PLUGIN_DIR . 'includes/class-h2h-league-table.php';
+				// Override SportsPress templates.
+				add_filter( 'sportspress_locate_template', array( $this, 'shortcode_override' ), 10, 3 );
+			}
 		}
 		
 		/**
