@@ -20,6 +20,9 @@ class H2H_League_Table extends SP_League_Table {
 
 	/** @var array The sort h2h priorities array. */
 	public $h2h_priorities;
+	
+	/** @var array Temporary save the full table stats for future h2h use	*/
+	public $temp_merged = array();
 
 	/**
 	 * Returns formatted data
@@ -783,15 +786,18 @@ var_dump($this->h2h_priorities);
 			endforeach;
 
 		endforeach;
-
 		
 		uasort( $merged, array( $this, 'sort' ) );
+		
+		if ( $is_main_loop ) {
+			$this->temp_merged = $merged;
+		}
 		
 		if ( ! $is_main_loop ) {
 			var_dump('this is not a main loop');
 			var_dump($merged);
 			uasort( $merged, array( $this, 'h2h_sort' ) );
-			var_dump($merged);
+			//var_dump($merged);
 		}
 
 		// Calculate position of teams for ties
