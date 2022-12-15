@@ -885,39 +885,6 @@ endif;
 	}
 
 	/**
-	 * Sort the table by priorities.
-	 *
-	 * @param array $a
-	 * @param array $b
-	 * @return int
-	 */
-	public function sort( $a, $b ) {
-
-		// Loop through priorities
-		foreach ( $this->priorities as $priority ) :
-
-			// Proceed if columns are not equal
-			if ( sp_array_value( $a, $priority['column'], 0 ) != sp_array_value( $b, $priority['column'], 0 ) ) :
-
-				// Compare column values
-				$output = (float) sp_array_value( $a, $priority['column'], 0 ) - (float) sp_array_value( $b, $priority['column'], 0 );
-
-				// Flip value if descending order
-				if ( $priority['order'] == 'DESC' ) {
-					$output = 0 - $output;
-				}
-
-				return ( $output > 0 ? 1 : -1 );
-
-			endif;
-
-		endforeach;
-
-		// Default sort by alphabetical
-		return strcmp( sp_array_value( $a, 'name', '' ), sp_array_value( $b, 'name', '' ) );
-	}
-	
-	/**
 	 * Sort the table by h2h priorities.
 	 *
 	 * @param array $a
