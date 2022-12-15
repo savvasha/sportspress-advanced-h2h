@@ -82,7 +82,7 @@ if ( ! class_exists( 'Advanced_H2H_Main_Class' ) ) :
 		 * Include required files
 		 */
 		private function includes() {
-			if ( 'h2h-adv' == get_option( 'sportspress_table_tiebreaker', 'none' ) ) {
+			if ( 'h2h' == get_option( 'sportspress_table_tiebreaker', 'none' ) ) {
 				// load needed class functions.
 				include SAH2H_PLUGIN_DIR . 'includes/class-h2h-league-table.php';
 				// Override SportsPress templates.

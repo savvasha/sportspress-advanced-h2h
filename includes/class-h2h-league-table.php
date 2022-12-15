@@ -813,7 +813,7 @@ endif;
 		}
 
 		// Head to head table sorting
-		if ( $is_main_loop && in_array( get_option( 'sportspress_table_tiebreaker', 'none' ), array('h2h', 'h2h-adv') ) ) {
+		if ( $is_main_loop && 'h2h' == get_option( 'sportspress_table_tiebreaker', 'none' ) ) {
 			$order = array();
 
 			foreach ( $this->tiebreakers as $pos => $teams ) {
