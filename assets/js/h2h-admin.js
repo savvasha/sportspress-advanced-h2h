@@ -6,7 +6,7 @@ jQuery( document ).ready( function($) {
 			if ($( this ).val() == "0") {
 				$( this ).siblings().prop( "disabled", true );
 			} else {
-				$( this ).siblings().prop( "disabled", false )
+				$( this ).siblings().prop( "disabled", false );
 			}
 		}
 	);
