@@ -666,7 +666,7 @@ endif;
 		
 		// Sort h2h priorities in descending order
 		ksort( $this->h2h_priorities );
-var_dump($this->h2h_priorities);
+
 		// Initialize games back column variable
 		$gb_column = null;
 
@@ -790,14 +790,21 @@ var_dump($this->h2h_priorities);
 		uasort( $merged, array( $this, 'sort' ) );
 		
 		if ( $is_main_loop ) {
+			// Temporary save the full table stat data
 			$this->temp_merged = $merged;
 		}
 		
 		if ( ! $is_main_loop ) {
-			var_dump('this is not a main loop');
-			var_dump($merged);
+			// Check the h2h priorities if are h2h_only
+			foreach ( $this->h2h_priorities as $temp_priority ) {
+				if ( '' == $temp_priority['h2h_only'] ) {
+					// If not replace the current h2h stat data with the full (temporary) stat data
+					foreach ( $team_ids as $temp_team_id ) {
+						$merged[ $temp_team_id ][ $temp_priority['column'] ] = $this->temp_merged[ $temp_team_id ][ $temp_priority['column'] ];
+					}
+				}
+			}
 			uasort( $merged, array( $this, 'h2h_sort' ) );
-			//var_dump($merged);
 		}
 
 		// Calculate position of teams for ties
