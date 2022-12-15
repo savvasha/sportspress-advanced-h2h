@@ -652,6 +652,7 @@ endif;
 				$this->h2h_priorities[ $h2h_priority ] = array(
 					'column' => $stat->post_name,
 					'order'  => sp_array_value( sp_array_value( $meta, 'h2h_order', array() ), 0, 'DESC' ),
+					'h2h_only'  => sp_array_value( sp_array_value( $meta, 'h2h_only', array() ), 0, '' ),
 				);
 			endif;
 
