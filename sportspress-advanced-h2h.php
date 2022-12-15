@@ -138,6 +138,7 @@ if ( ! class_exists( 'Advanced_H2H_Main_Class' ) ) :
 		public static function meta_box( $post ) {
 			$h2h_priority 	= get_post_meta( $post->ID, 'h2h_priority', true );
 			$h2h_order     	= get_post_meta( $post->ID, 'h2h_order', true );
+			$h2h_only     	= get_post_meta( $post->ID, 'h2h_only', true );
 			
 			?>
 			<p><strong><?php _e( 'H2H Sort Order', 'sportspress-advanced-h2h' ); ?></strong></p>
@@ -165,6 +166,11 @@ if ( ! class_exists( 'Advanced_H2H_Main_Class' ) ) :
 					endforeach;
 					?>
 				</select>
+				<br/>
+				<label>
+					<input type="checkbox" name="h2h_only" value="1" <?php checked( $h2h_only, 1 ); ?> />
+					<?php esc_attr_e( 'H2H Only', 'sportspress-advanced-h2h' ); ?>
+				</label>
 			</p>
 			<?php
 		}
@@ -175,6 +181,7 @@ if ( ! class_exists( 'Advanced_H2H_Main_Class' ) ) :
 		public static function save( $post_id, $post ) {
 			update_post_meta( $post_id, 'h2h_priority', sp_array_value( $_POST, 'h2h_priority', '' ) );
 			update_post_meta( $post_id, 'h2h_order', sp_array_value( $_POST, 'h2h_order', '' ) );
+			update_post_meta( $post_id, 'h2h_only', sp_array_value( $_POST, 'h2h_only', null, 'key' ) );
 		}
 		
 		/**
