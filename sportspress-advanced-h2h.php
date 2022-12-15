@@ -97,39 +97,41 @@ if ( ! class_exists( 'Advanced_H2H_Main_Class' ) ) :
 		 */
 		public function add_settings( $settings ) {
 			foreach ( $settings as $key => $setting ) {
-				if ( $setting['id'] === 'sportspress_table_tiebreaker' ) {
-					$setting['desc'] = '<div id="h2h-criteria">';
-					$setting['desc'] .= '<strong>Head to Head Criteria:</strong><br/>';
-					$args  = array(
-						'post_type'      => 'sp_column',
-						'numberposts'    => -1,
-						'posts_per_page' => -1,
-						'orderby'        => 'menu_order',
-						'order'          => 'ASC',
-					);
-					$stats = get_posts( $args );
-					$h2h_criteria = array();
-					$i = 1;
-					foreach ( $stats as $stat ) {
-						$h2h_priority = get_post_meta( $stat->ID, 'h2h_priority', true );
-						$h2h_order = get_post_meta( $stat->ID, 'h2h_order', true );
-						$h2h_only = get_post_meta( $stat->ID, 'h2h_only', true );
-						if ( $h2h_priority > 0 ) {
-							$h2h_criteria[ $h2h_priority ] = $stat;
-							$h2h_criteria[ $h2h_priority ]->h2h_order = $this->h2h_get_post_order( $stat->ID );
-							if ( 1 == $h2h_only ) {
-								$h2h_criteria[ $h2h_priority ]->h2h_only = 'Head to Head';
+				if ( 'h2h' == get_option( 'sportspress_table_tiebreaker', 'none' ) ) {
+					if ( $setting['id'] === 'sportspress_table_tiebreaker' ) {
+						$setting['desc'] = '<div id="h2h-criteria">';
+						$setting['desc'] .= '<strong>Head to Head Criteria:</strong><br/>';
+						$args  = array(
+							'post_type'      => 'sp_column',
+							'numberposts'    => -1,
+							'posts_per_page' => -1,
+							'orderby'        => 'menu_order',
+							'order'          => 'ASC',
+						);
+						$stats = get_posts( $args );
+						$h2h_criteria = array();
+						$i = 1;
+						foreach ( $stats as $stat ) {
+							$h2h_priority = get_post_meta( $stat->ID, 'h2h_priority', true );
+							$h2h_order = get_post_meta( $stat->ID, 'h2h_order', true );
+							$h2h_only = get_post_meta( $stat->ID, 'h2h_only', true );
+							if ( $h2h_priority > 0 ) {
+								$h2h_criteria[ $h2h_priority ] = $stat;
+								$h2h_criteria[ $h2h_priority ]->h2h_order = $this->h2h_get_post_order( $stat->ID );
+								if ( 1 == $h2h_only ) {
+									$h2h_criteria[ $h2h_priority ]->h2h_only = 'Head to Head';
+								}
 							}
 						}
+						ksort( $h2h_criteria );
+						foreach ( $h2h_criteria as $h2h_criterion ) {
+							$setting['desc'] .= '(' . $h2h_criterion->h2h_order . ') ' . $h2h_criterion->h2h_only . ' ' . $h2h_criterion->post_excerpt . '<br/>';
+							$i++;
+						}
+						$setting['desc'] .= '</div>';
 					}
-					ksort( $h2h_criteria );
-					foreach ( $h2h_criteria as $h2h_criterion ) {
-						$setting['desc'] .= '(' . $h2h_criterion->h2h_order . ') ' . $h2h_criterion->h2h_only . ' ' . $h2h_criterion->post_excerpt . '<br/>';
-						$i++;
-					}
-					$setting['desc'] .= '</div>';
 				}
-			$newsettings[ $key ] = $setting;
+				$newsettings[ $key ] = $setting;
 			}
 
 			  return $newsettings;
