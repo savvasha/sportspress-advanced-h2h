@@ -5,23 +5,28 @@
  * An Advanced Head to Head League Table Class based on SportsPress League Table Class.
  *
  * @class       H2H_League_Table
- * @version     2.7.9
+ * @version     1.0.0
  * @package     H2H/Classes
  * @category    Class
  * @author      Savvas
  */
- 
+
 // Exit if SportsPress is not installed and activated.
 if ( ! class_exists( 'SP_League_Table' ) ) {
 	exit;
 }
 
+/**
+ * H2H League Table Class
+ *
+ * @class H2H_League_Table
+ */
 class H2H_League_Table extends SP_League_Table {
 
 	/** @var array The sort h2h priorities array. */
 	public $h2h_priorities;
-	
-	/** @var array Temporary save the full table stats for future h2h use	*/
+
+	/** @var array Temporary save the full table stats for future h2h use   */
 	public $temp_merged = array();
 
 	/**
@@ -49,7 +54,7 @@ class H2H_League_Table extends SP_League_Table {
 			$this->date = 0;
 		}
 
-		// Apply defaults
+		// Apply defaults.
 		if ( empty( $this->orderby ) ) {
 			$this->orderby = 'default';
 		}
@@ -60,7 +65,7 @@ class H2H_League_Table extends SP_League_Table {
 			$select = 'auto';
 		}
 
-		if ( 'range' == $this->date ) {
+		if ( 'range' === $this->date ) {
 
 			$this->relative = get_post_meta( $this->ID, 'sp_date_relative', true );
 
@@ -76,24 +81,24 @@ class H2H_League_Table extends SP_League_Table {
 			}
 		}
 
-		// Get labels from result variables
+		// Get labels from result variables.
 		$result_labels = (array) sp_get_var_labels( 'sp_result' );
 
-		// Get labels from outcome variables
+		// Get labels from outcome variables.
 		$outcome_labels = (array) sp_get_var_labels( 'sp_outcome' );
 
-		// Get post type
+		// Get post type.
 		$post_type = sp_get_post_mode_type( $this->ID );
 
-		// Determine if main loop
+		// Determine if main loop.
 		if ( $team_ids ) {
 
 			$is_main_loop = false;
 
 		} else {
 
-			// Get teams automatically if set to auto
-			if ( 'auto' == $select ) {
+			// Get teams automatically if set to auto.
+			if ( 'auto' === $select ) {
 				$team_ids = array();
 
 				$args = array(
@@ -131,31 +136,31 @@ class H2H_League_Table extends SP_League_Table {
 			$is_main_loop = true;
 		}
 
-		// Get all leagues populated with stats where available
+		// Get all leagues populated with stats where available.
 		$tempdata = sp_array_combine( $team_ids, $table_stats );
 
-		// Create entry for each team in totals
+		// Create entry for each team in totals.
 		$totals       = array();
 		$placeholders = array();
 
-		// Initialize incremental counter
+		// Initialize incremental counter.
 		$this->pos     = 0;
 		$this->counter = 0;
 
-		// Initialize team compare
+		// Initialize team compare.
 		$this->compare = null;
 
-		// Initialize streaks counter
+		// Initialize streaks counter.
 		$streaks = array();
 
-		// Initialize form counter
+		// Initialize form counter.
 		$forms = array();
 
-		// Initialize last counters
+		// Initialize last counters.
 		$last5s  = array();
 		$last10s = array();
 
-		// Initialize record counters
+		// Initialize record counters.
 		$homerecords = array();
 		$awayrecords = array();
 
@@ -164,25 +169,25 @@ class H2H_League_Table extends SP_League_Table {
 				continue;
 			}
 
-			// Initialize team streaks counter
+			// Initialize team streaks counter.
 			$streaks[ $team_id ] = array(
 				'name'  => '',
 				'count' => 0,
 				'fire'  => 1,
 			);
 
-			// Initialize team form counter
+			// Initialize team form counter.
 			$forms[ $team_id ] = array();
 
-			// Initialize team last counters
+			// Initialize team last counters.
 			$last5s[ $team_id ]  = array();
 			$last10s[ $team_id ] = array();
 
-			// Initialize team record counters
+			// Initialize team record counters.
 			$homerecords[ $team_id ] = array();
 			$awayrecords[ $team_id ] = array();
 
-			// Add outcome types to team last and record counters
+			// Add outcome types to team last and record counters.
 			foreach ( $outcome_labels as $key => $value ) :
 				$last5s[ $team_id ][ $key ]      = 0;
 				$last10s[ $team_id ][ $key ]     = 0;
@@ -190,7 +195,7 @@ class H2H_League_Table extends SP_League_Table {
 				$awayrecords[ $team_id ][ $key ] = 0;
 			endforeach;
 
-			// Initialize team totals
+			// Initialize team totals.
 			$totals[ $team_id ] = array(
 				'eventsplayed'       => 0,
 				'eventsplayed_home'  => 0,
@@ -224,11 +229,11 @@ class H2H_League_Table extends SP_League_Table {
 				$totals[ $team_id ][ $key . '_venue' ] = 0;
 			endforeach;
 
-			// Get static stats
+			// Get static stats.
 			$static = get_post_meta( $team_id, 'sp_columns', true );
 
 			if ( 'yes' == get_option( 'sportspress_team_column_editing', 'no' ) && $league_ids && $season_ids ) :
-				// Add static stats to placeholders
+				// Add static stats to placeholders.
 				foreach ( $league_ids as $league_id ) :
 					foreach ( $season_ids as $season_id ) :
 						$placeholders[ $team_id ] = (array) sp_array_value( sp_array_value( $static, $league_id, array() ), $season_id, array() );
@@ -238,15 +243,15 @@ class H2H_League_Table extends SP_League_Table {
 
 		endforeach;
 
-		// Get which event status to include
+		// Get which event status to include.
 		$event_status = get_post_meta( $this->ID, 'sp_event_status', true );
 
 		if ( empty( $event_status ) ) {
 			$event_status = array( 'publish', 'future' );
 		}
 
-		if ( isset( $this->show_published_events ) ) { // If an attribute was pass through shortcode
-			if ( $this->show_published_events == '1' ) {
+		if ( isset( $this->show_published_events ) ) { // If an attribute was pass through shortcode.
+			if ( '1' == $this->show_published_events ) {
 				$event_status[] = 'publish';
 			} else {
 				if ( ( $status_key = array_search( 'publish', $event_status ) ) !== false ) {
@@ -255,7 +260,7 @@ class H2H_League_Table extends SP_League_Table {
 			}
 		}
 
-		if ( isset( $this->show_future_events ) ) { // If an attribute was pass through shortcode
+		if ( isset( $this->show_future_events ) ) { // If an attribute was pass through shortcode.
 			if ( $this->show_future_events == '1' ) {
 				$event_status[] = 'future';
 			} else {
@@ -265,7 +270,7 @@ class H2H_League_Table extends SP_League_Table {
 			}
 		}
 
-		// Make sure to have unique values in the array
+		// Make sure to have unique values in the array.
 		$event_status = array_unique( $event_status );
 
 		$args = array(
@@ -334,13 +339,13 @@ class H2H_League_Table extends SP_League_Table {
 
 		$events = get_posts( $args );
 
-		// Remove range filters
+		// Remove range filters.
 		remove_filter( 'posts_where', array( $this, 'range' ) );
 		remove_filter( 'posts_where', array( $this, 'relative' ) );
 
 		$e = 0;
 
-		// Event loop
+		// Event loop.
 		foreach ( $events as $event ) :
 
 			$teams = (array) get_post_meta( $event->ID, 'sp_team', false );
@@ -379,13 +384,13 @@ class H2H_League_Table extends SP_League_Table {
 
 							foreach ( $value as $outcome ) :
 
-								// Increment events played and outcome count
+								// Increment events played and outcome count.
 								if ( array_key_exists( $team_id, $totals ) && is_array( $totals[ $team_id ] ) && array_key_exists( $outcome, $totals[ $team_id ] ) ) :
 									$totals[ $team_id ]['eventsplayed'] ++;
 									$totals[ $team_id ]['eventminutes'] += $minutes;
 									$totals[ $team_id ][ $outcome ] ++;
 
-									// Add to home or away stats
+									// Add to home or away stats.
 									if ( 0 === $i ) :
 										$totals[ $team_id ]['eventsplayed_home'] ++;
 										$totals[ $team_id ]['eventminutes_home'] += $minutes;
@@ -396,7 +401,7 @@ class H2H_League_Table extends SP_League_Table {
 										$totals[ $team_id ][ $outcome . '_away' ] ++;
 									endif;
 
-									// Add to venue stats
+									// Add to venue stats.
 									if ( sp_is_home_venue( $team_id, $event->ID ) ) :
 										$totals[ $team_id ]['eventsplayed_venue'] ++;
 										$totals[ $team_id ]['eventminutes_venue'] += $minutes;
@@ -406,7 +411,7 @@ class H2H_League_Table extends SP_League_Table {
 
 								if ( $outcome && $outcome != '-1' ) :
 
-									// Add to streak counter
+									// Add to streak counter.
 									if ( $streaks[ $team_id ]['fire'] && ( $streaks[ $team_id ]['name'] == '' || $streaks[ $team_id ]['name'] == $outcome ) ) :
 										$streaks[ $team_id ]['name'] = $outcome;
 										$streaks[ $team_id ]['count'] ++;
@@ -414,23 +419,23 @@ class H2H_League_Table extends SP_League_Table {
 										$streaks[ $team_id ]['fire'] = 0;
 									endif;
 
-									// Add to form counter
+									// Add to form counter.
 									$forms[ $team_id ][] = array(
 										'id'      => $event->ID,
 										'outcome' => $outcome,
 									);
 
-									// Add to last 5 counter if sum is less than 5
+									// Add to last 5 counter if sum is less than 5.
 									if ( array_key_exists( $team_id, $last5s ) && array_key_exists( $outcome, $last5s[ $team_id ] ) && array_sum( $last5s[ $team_id ] ) < 5 ) :
 										$last5s[ $team_id ][ $outcome ] ++;
 									endif;
 
-									// Add to last 10 counter if sum is less than 10
+									// Add to last 10 counter if sum is less than 10.
 									if ( array_key_exists( $team_id, $last10s ) && array_key_exists( $outcome, $last10s[ $team_id ] ) && array_sum( $last10s[ $team_id ] ) < 10 ) :
 										$last10s[ $team_id ][ $outcome ] ++;
 									endif;
 
-									// Add to home or away record
+									// Add to home or away record.
 									if ( 0 === $i ) {
 										if ( array_key_exists( $team_id, $homerecords ) && array_key_exists( $outcome, $homerecords[ $team_id ] ) ) {
 											$homerecords[ $team_id ][ $outcome ] ++;
@@ -448,20 +453,20 @@ class H2H_League_Table extends SP_League_Table {
 										else :
 											if ( array_key_exists( $team_id, $totals ) && is_array( $totals[ $team_id ] ) && array_key_exists( $key . 'for', $totals[ $team_id ] ) ) :
 
-												// Get numeric value
+												// Get numeric value.
 												$value = floatval( $value );
 
 												$totals[ $team_id ][ $key . 'for' ]             += $value;
 												$totals[ $team_id ][ $key . 'for' . ( $e + 1 ) ] = $value;
 
-												// Add to home or away stats
+												// Add to home or away stats.
 												if ( 0 === $i ) :
 													$totals[ $team_id ][ $key . 'for_home' ] += $value;
 												else :
 													$totals[ $team_id ][ $key . 'for_away' ] += $value;
 												endif;
 
-												// Add to venue stats
+												// Add to venue stats.
 												if ( sp_is_home_venue( $team_id, $event->ID ) ) :
 													$totals[ $team_id ][ $key . 'for_venue' ] += $value;
 												endif;
@@ -469,20 +474,20 @@ class H2H_League_Table extends SP_League_Table {
 												foreach ( $results as $other_team_id => $other_result ) :
 													if ( $other_team_id != $team_id && array_key_exists( $key . 'against', $totals[ $team_id ] ) ) :
 
-														// Get numeric value of other team's result
+														// Get numeric value of other team's result.
 														$value = floatval( sp_array_value( $other_result, $key, 0 ) );
 
 														$totals[ $team_id ][ $key . 'against' ]             += $value;
 														$totals[ $team_id ][ $key . 'against' . ( $e + 1 ) ] = $value;
 
-														// Add to home or away stats
+														// Add to home or away stats.
 														if ( 0 === $i ) :
 															$totals[ $team_id ][ $key . 'against_home' ] += $value;
 														else :
 															$totals[ $team_id ][ $key . 'against_away' ] += $value;
 														endif;
 
-														// Add to venue stats
+														// Add to venue stats.
 														if ( sp_is_home_venue( $team_id, $event->ID ) ) :
 															$totals[ $team_id ][ $key . 'against_venue' ] += $value;
 														endif;
@@ -502,7 +507,7 @@ endif;
 
 		endforeach;
 
-		// Get outcomes
+		// Get outcomes.
 		$outcomes = array();
 
 		$args  = array(
@@ -514,19 +519,19 @@ endif;
 
 		if ( $posts ) :
 			foreach ( $posts as $post ) :
-				// Get ID
+				// Get ID.
 				$id = $post->ID;
 
-				// Get title
+				// Get title.
 				$title = $post->post_title;
 
-				// Get abbreviation
+				// Get abbreviation.
 				$abbreviation = get_post_meta( $id, 'sp_abbreviation', true );
 				if ( ! $abbreviation ) :
 					$abbreviation = substr( $title, 0, 1 );
 				endif;
 
-				// Get color
+				// Get color.
 				$color = get_post_meta( $id, 'sp_color', true );
 				if ( '' === $color ) {
 					$color = '#888888';
@@ -542,7 +547,7 @@ endif;
 		endif;
 
 		foreach ( $streaks as $team_id => $streak ) :
-			// Compile streaks counter and add to totals
+			// Compile streaks counter and add to totals.
 			if ( $streak['name'] ) :
 				$outcome = sp_array_value( $outcomes, $streak['name'], false );
 				if ( $outcome ) :
@@ -557,18 +562,18 @@ endif;
 		endforeach;
 
 		foreach ( $forms as $team_id => $form ) :
-			// Apply form limit
-			if ( $form_limit && sizeof( $form ) > $form_limit ) :
+			// Apply form limit.
+			if ( $form_limit && count( $form ) > $form_limit ) :
 				$form = array_slice( $form, 0, $form_limit );
 			endif;
 
-			// Initialize team form array
+			// Initialize team form array.
 			$team_form = array();
 
-			// Reverse form array to display in chronological order
+			// Reverse form array to display in chronological order.
 			$form = array_reverse( $form );
 
-			// Loop through event form
+			// Loop through event form.
 			foreach ( $form as $form_event ) :
 				if ( $form_event['id'] ) :
 					$outcome = sp_array_value( $outcomes, $form_event['outcome'], false );
@@ -581,14 +586,14 @@ endif;
 							$abbreviation = '<span class="sp-form-event-link" style="background-color:' . $color . '">' . $abbreviation . '</span>';
 						endif;
 
-						// Add to team form
+						// Add to team form.
 						$team_form[] = $abbreviation;
 					endif;
 				endif;
 			endforeach;
 
-			// Append to totals
-			if ( sizeof( $team_form ) ) :
+			// Append to totals.
+			if ( count( $team_form ) ) :
 				$totals[ $team_id ]['form'] = '<div class="sp-form-events">' . implode( ' ', $team_form ) . '</div>';
 			else :
 				$totals[ $team_id ]['form'] = null;
@@ -596,22 +601,22 @@ endif;
 		endforeach;
 
 		foreach ( $last5s as $team_id => $last5 ) :
-			// Add last 5 to totals
+			// Add last 5 to totals.
 			$totals[ $team_id ]['last5'] = $last5;
 		endforeach;
 
 		foreach ( $last10s as $team_id => $last10 ) :
-			// Add last 10 to totals
+			// Add last 10 to totals.
 			$totals[ $team_id ]['last10'] = $last10;
 		endforeach;
 
 		foreach ( $homerecords as $team_id => $homerecord ) :
-			// Add home record to totals
+			// Add home record to totals.
 			$totals[ $team_id ]['homerecord'] = $homerecord;
 		endforeach;
 
 		foreach ( $awayrecords as $team_id => $awayrecord ) :
-			// Add away record to totals
+			// Add away record to totals.
 			$totals[ $team_id ]['awayrecord'] = $awayrecord;
 		endforeach;
 
@@ -624,23 +629,23 @@ endif;
 		);
 		$stats = get_posts( $args );
 
-		$columns          = array();
-		$this->priorities = array();
+		$columns              = array();
+		$this->priorities     = array();
 		$this->h2h_priorities = array();
 
 		foreach ( $stats as $stat ) :
 
-			// Get post meta
+			// Get post meta.
 			$meta = get_post_meta( $stat->ID );
 
-			// Add equation to object
+			// Add equation to object.
 			$stat->equation  = sp_array_value( sp_array_value( $meta, 'sp_equation', array() ), 0, null );
 			$stat->precision = sp_array_value( sp_array_value( $meta, 'sp_precision', array() ), 0, 0 );
 
-			// Add column name to columns
+			// Add column name to columns.
 			$columns[ $stat->post_name ] = $stat->post_title;
 
-			// Add order to priorities if priority is set and does not exist in array already
+			// Add order to priorities if priority is set and does not exist in array already.
 			$priority = sp_array_value( sp_array_value( $meta, 'sp_priority', array() ), 0, 0 );
 			if ( $priority && ! array_key_exists( $priority, $this->priorities ) ) :
 				$this->priorities[ $priority ] = array(
@@ -648,29 +653,29 @@ endif;
 					'order'  => sp_array_value( sp_array_value( $meta, 'sp_order', array() ), 0, 'DESC' ),
 				);
 			endif;
-			
-			// Add order to h2h priorities if h2h priority is set and does not exist in array already
+
+			// Add order to h2h priorities if h2h priority is set and does not exist in array already.
 			$h2h_priority = sp_array_value( sp_array_value( $meta, 'h2h_priority', array() ), 0, 0 );
 			if ( $h2h_priority && ! array_key_exists( $h2h_priority, $this->h2h_priorities ) ) :
 				$this->h2h_priorities[ $h2h_priority ] = array(
-					'column' => $stat->post_name,
-					'order'  => sp_array_value( sp_array_value( $meta, 'h2h_order', array() ), 0, 'DESC' ),
-					'h2h_only'  => sp_array_value( sp_array_value( $meta, 'h2h_only', array() ), 0, '' ),
+					'column'   => $stat->post_name,
+					'order'    => sp_array_value( sp_array_value( $meta, 'h2h_order', array() ), 0, 'DESC' ),
+					'h2h_only' => sp_array_value( sp_array_value( $meta, 'h2h_only', array() ), 0, '' ),
 				);
 			endif;
 
 		endforeach;
 
-		// Sort priorities in descending order
+		// Sort priorities in descending order.
 		ksort( $this->priorities );
-		
-		// Sort h2h priorities in descending order
+
+		// Sort h2h priorities in descending order.
 		ksort( $this->h2h_priorities );
 
-		// Initialize games back column variable
+		// Initialize games back column variable.
 		$gb_column = null;
 
-		// Fill in empty placeholder values for each team
+		// Fill in empty placeholder values for each team.
 		foreach ( $team_ids as $team_id ) :
 			if ( ! $team_id ) {
 				continue;
@@ -687,7 +692,7 @@ endif;
 							$placeholder = '-';
 						endif;
 					else :
-						// Solve
+						// Solve.
 						$placeholder = sp_solve( $stat->equation, sp_array_value( $totals, $team_id, array() ), $stat->precision, 0, $team_id );
 
 						if ( '$gamesback' == $stat->equation ) {
@@ -695,10 +700,10 @@ endif;
 						}
 
 						if ( ! in_array( $stat->equation, apply_filters( 'sportspress_equation_presets', array( '$gamesback', '$streak', '$form', '$last5', '$last10', '$homerecord', '$awayrecord' ) ) ) ) :
-							// Adjustments
+							// Adjustments.
 							$adjustment = sp_array_value( $adjustments, $team_id, array() );
 
-							if ( $adjustment != 0 ) :
+							if ( 0 != $adjustment ) :
 								$value        = floatval( sp_array_value( $adjustment, $stat->post_name, 0 ) );
 								$placeholder += $value;
 								$placeholder  = number_format( $placeholder, $stat->precision, '.', '' );
@@ -711,7 +716,7 @@ endif;
 			endforeach;
 		endforeach;
 
-		// Find win and loss variables for games back
+		// Find win and loss variables for games back.
 		$w = $l = null;
 		if ( $gb_column ) {
 			$args     = array(
@@ -738,7 +743,7 @@ endif;
 				}
 			}
 
-			// Calculate games back
+			// Calculate games back.
 			$args     = array(
 				'post_type'      => 'sp_outcome',
 				'numberposts'    => 1,
@@ -764,19 +769,19 @@ endif;
 			}
 		}
 
-		// Merge the data and placeholders arrays
+		// Merge the data and placeholders arrays.
 		$merged = array();
 
 		foreach ( $placeholders as $team_id => $team_data ) :
 
-			// Add team name to row
+			// Add team name to row.
 			$merged[ $team_id ] = array();
 
 			$team_data['name'] = sp_team_short_name( $team_id );
 
 			foreach ( $team_data as $key => $value ) :
 
-				// Use static data if key exists and value is not empty, else use placeholder
+				// Use static data if key exists and value is not empty, else use placeholder.
 				if ( array_key_exists( $team_id, $tempdata ) && array_key_exists( $key, $tempdata[ $team_id ] ) && $tempdata[ $team_id ][ $key ] != '' ) :
 					$value = $tempdata[ $team_id ][ $key ];
 				endif;
@@ -786,19 +791,19 @@ endif;
 			endforeach;
 
 		endforeach;
-		
+
 		uasort( $merged, array( $this, 'sort' ) );
-		
+
 		if ( $is_main_loop ) {
-			// Temporary save the full table stat data
+			// Temporary save the full table stat data.
 			$this->temp_merged = $merged;
 		}
-		
+
 		if ( ! $is_main_loop ) {
-			// Check the h2h priorities if are h2h_only
+			// Check the h2h priorities if are h2h_only.
 			foreach ( $this->h2h_priorities as $temp_priority ) {
 				if ( '' == $temp_priority['h2h_only'] ) {
-					// If not replace the current h2h stat data with the full (temporary) stat data
+					// If not replace the current h2h stat data with the full (temporary) stat data.
 					foreach ( $team_ids as $temp_team_id ) {
 						$merged[ $temp_team_id ][ $temp_priority['column'] ] = $this->temp_merged[ $temp_team_id ][ $temp_priority['column'] ];
 					}
@@ -807,17 +812,17 @@ endif;
 			uasort( $merged, array( $this, 'h2h_sort' ) );
 		}
 
-		// Calculate position of teams for ties
+		// Calculate position of teams for ties.
 		foreach ( $merged as $team_id => $team_columns ) {
 			$merged[ $team_id ]['pos'] = $this->calculate_pos( $team_columns, $team_id );
 		}
 
-		// Head to head table sorting
+		// Head to head table sorting.
 		if ( $is_main_loop && 'h2h' == get_option( 'sportspress_table_tiebreaker', 'none' ) ) {
 			$order = array();
 
 			foreach ( $this->tiebreakers as $pos => $teams ) {
-				if ( sizeof( $teams ) === 1 ) {
+				if ( count( $teams ) === 1 ) {
 					$order[] = reset( $teams );
 				} else {
 					$standings = $this->data( false, $teams );
@@ -834,7 +839,7 @@ endif;
 			}
 			$merged = $head_to_head;
 
-			// Recalculate position of teams after head to head
+			// Recalculate position of teams after head to head.
 			$this->pos     = 0;
 			$this->counter = 0;
 			foreach ( $merged as $team_id => $team_columns ) {
@@ -842,10 +847,10 @@ endif;
 			}
 		}
 
-		// Rearrange the table if Default ordering is not selected
-		if ( $this->orderby != 'default' ) {
+		// Rearrange the table if Default ordering is not selected.
+		if ( 'default' !== $this->orderby ) {
 			uasort( $merged, array( $this, 'simple_order' ) );
-			// Recalculate position of teams
+			// Recalculate position of teams.
 			$this->pos     = 0;
 			$this->counter = 0;
 			foreach ( $merged as $team_id => $team_columns ) {
@@ -853,7 +858,7 @@ endif;
 			}
 		}
 
-		// Rearrange data array to reflect values
+		// Rearrange data array to reflect values.
 		$data = array();
 		foreach ( $merged as $key => $value ) :
 			$data[ $key ] = $tempdata[ $key ];
@@ -893,17 +898,17 @@ endif;
 	 */
 	public function h2h_sort( $a, $b ) {
 
-		// Loop through priorities
+		// Loop through priorities.
 		foreach ( $this->h2h_priorities as $priority ) :
 
-			// Proceed if columns are not equal
-			if ( sp_array_value( $a, $priority['column'], 0 ) != sp_array_value( $b, $priority['column'], 0 ) ) :
+			// Proceed if columns are not equal.
+			if ( sp_array_value( $a, $priority['column'], 0 ) !== sp_array_value( $b, $priority['column'], 0 ) ) :
 
-				// Compare column values
+				// Compare column values.
 				$output = (float) sp_array_value( $a, $priority['column'], 0 ) - (float) sp_array_value( $b, $priority['column'], 0 );
 
-				// Flip value if descending order
-				if ( $priority['order'] == 'DESC' ) {
+				// Flip value if descending order.
+				if ( 'DESC' === $priority['order'] ) {
 					$output = 0 - $output;
 				}
 
@@ -913,7 +918,7 @@ endif;
 
 		endforeach;
 
-		// Default sort by alphabetical
+		// Default sort by alphabetical.
 		return strcmp( sp_array_value( $a, 'name', '' ), sp_array_value( $b, 'name', '' ) );
 	}
 
