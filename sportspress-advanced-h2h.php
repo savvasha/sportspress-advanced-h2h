@@ -206,6 +206,6 @@ function sah2h_save( $post_id, $post ) {
 function sah2h_admin_enqueue_assets() {
 	$current_screen = get_current_screen();
 	if ( $current_screen && 'sp_column' === $current_screen->id ) {
-		wp_enqueue_script( 'h2h-admin', plugin_dir_url( __FILE__ ) . 'assets/js/h2h-admin.js', array(), '1.0.0', true );
+		wp_enqueue_script( 'sah2h-admin', plugin_dir_url( __FILE__ ) . 'assets/js/sah2h-admin.js', array(), '1.0.0', true );
 	}
 }

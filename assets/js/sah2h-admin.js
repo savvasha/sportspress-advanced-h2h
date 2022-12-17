@@ -1,7 +1,7 @@
 /**
  * Back-end functionality for SportsPress Advanced Head to Head.
  *
- * @package h2h-admin
+ * @package sah2h-admin
  */
 
 jQuery( document ).ready(
