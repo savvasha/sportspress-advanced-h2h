@@ -43,7 +43,7 @@ if ( ! isset( $highlight ) ) {
 	$highlight = get_post_meta( $id, 'sp_highlight', true );
 }
 
-$table = new H2H_League_Table( $id );
+$table = new SAH2H_League_Table( $id );
 
 if ( $show_title && false === $title && $id ) :
 	$caption = $table->caption;

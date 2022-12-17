@@ -94,7 +94,7 @@ function sah2h_add_settings( $settings ) {
 					$h2h_only     = get_post_meta( $stat->ID, 'h2h_only', true );
 					if ( $h2h_priority > 0 ) {
 						$h2h_criteria[ $h2h_priority ]            = $stat;
-						$h2h_criteria[ $h2h_priority ]->h2h_order = h2h_get_post_order( $stat->ID );
+						$h2h_criteria[ $h2h_priority ]->h2h_order = sah2h_get_post_order( $stat->ID );
 						if ( 1 === intval( $h2h_only ) ) {
 							$h2h_criteria[ $h2h_priority ]->h2h_only = esc_html__( 'Head to Head ', 'sportspress-advanced-h2h' );
 						}
