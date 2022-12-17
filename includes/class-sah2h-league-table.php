@@ -1,12 +1,12 @@
 <?php
 /**
- * H2H League Table Class
+ * SAH2H League Table Class
  *
  * An Advanced Head to Head League Table Class based on SportsPress League Table Class.
  *
- * @class       H2H_League_Table
+ * @class       SAH2H_League_Table
  * @version     1.0.0
- * @package     H2H/Classes
+ * @package     SAH2H/Classes
  * @category    Class
  * @author      Savvas
  */
@@ -17,11 +17,11 @@ if ( ! class_exists( 'SP_League_Table' ) ) {
 }
 
 /**
- * H2H League Table Class
+ * SAH2H League Table Class
  *
- * @class H2H_League_Table
+ * @class SAH2H_League_Table
  */
-class H2H_League_Table extends SP_League_Table {
+class SAH2H_League_Table extends SP_League_Table {
 
 	/** @var array The sort h2h priorities array. */
 	public $h2h_priorities;

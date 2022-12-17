@@ -35,9 +35,9 @@ if ( ! defined( 'SAH2H_PLUGIN_URL' ) ) {
 // Include required files.
 if ( 'h2h' === get_option( 'sportspress_table_tiebreaker', 'none' ) ) {
 	// load needed class functions.
-	include SAH2H_PLUGIN_DIR . 'includes/class-h2h-league-table.php';
+	include SAH2H_PLUGIN_DIR . 'includes/class-sah2h-league-table.php';
 	// Override SportsPress templates.
-	add_filter( 'sportspress_locate_template', 'shortcode_override', 10, 3 );
+	add_filter( 'sportspress_locate_template', 'sah2h_shortcode_override', 10, 3 );
 }
 
 /**
@@ -48,7 +48,7 @@ if ( 'h2h' === get_option( 'sportspress_table_tiebreaker', 'none' ) ) {
  * @param mixed $template_path The template path.
  * @return string
  */
-function shortcode_override( $template = null, $template_name = null, $template_path = null ) {
+function sah2h_shortcode_override( $template = null, $template_name = null, $template_path = null ) {
 
 	if ( 'league-table.php' === $template_name ) {
 		$template_path = SAH2H_PLUGIN_DIR . 'templates/';
@@ -59,12 +59,12 @@ function shortcode_override( $template = null, $template_name = null, $template_
 }
 
 // Filters.
-add_filter( 'sportspress_table_options', 'h2h_add_settings' );
+add_filter( 'sportspress_table_options', 'sah2h_add_settings' );
 
 // Actions.
-add_action( 'add_meta_boxes', 'h2h_add_meta_boxes', 30 );
-add_action( 'sportspress_process_sp_column_meta', 'h2h_save', 15, 2 );
-add_action( 'admin_enqueue_scripts', 'h2h_admin_enqueue_assets', -99 );
+add_action( 'add_meta_boxes', 'sah2h_add_meta_boxes', 30 );
+add_action( 'sportspress_process_sp_column_meta', 'sah2h_save', 15, 2 );
+add_action( 'admin_enqueue_scripts', 'sah2h_admin_enqueue_assets', -99 );
 
 /**
  * Add settings.
@@ -72,7 +72,7 @@ add_action( 'admin_enqueue_scripts', 'h2h_admin_enqueue_assets', -99 );
  * @param array $settings The SportsPress settings array.
  * @return array
  */
-function h2h_add_settings( $settings ) {
+function sah2h_add_settings( $settings ) {
 	foreach ( $settings as $key => $setting ) {
 		if ( 'h2h' === get_option( 'sportspress_table_tiebreaker', 'none' ) ) {
 			if ( 'sportspress_table_tiebreaker' === $setting['id'] ) {
@@ -121,7 +121,7 @@ function h2h_add_settings( $settings ) {
  * @param integer $post_id The post id.
  * @return string
  */
-function h2h_get_post_order( $post_id ) {
+function sah2h_get_post_order( $post_id ) {
 	$priority = get_post_meta( $post_id, 'h2h_priority', true );
 	if ( $priority ) :
 		return $priority . ' ' . str_replace(
@@ -137,8 +137,8 @@ function h2h_get_post_order( $post_id ) {
 /**
  * Add meta boxes.
  */
-function h2h_add_meta_boxes() {
-	add_meta_box( 'h2h_h2hdiv', __( 'Advanced Head to Head', 'sportspress-advanced-h2h' ), 'h2h_meta_box', 'sp_column', 'side', 'low' );
+function sah2h_add_meta_boxes() {
+	add_meta_box( 'h2h_h2hdiv', __( 'Advanced Head to Head', 'sportspress-advanced-h2h' ), 'sah2h_meta_box', 'sp_column', 'side', 'low' );
 }
 
 /**
@@ -146,7 +146,7 @@ function h2h_add_meta_boxes() {
  *
  * @param object $post The post object.
  */
-function h2h_meta_box( $post ) {
+function sah2h_meta_box( $post ) {
 	$h2h_priority = get_post_meta( $post->ID, 'h2h_priority', true );
 	$h2h_order    = get_post_meta( $post->ID, 'h2h_order', true );
 	$h2h_only     = get_post_meta( $post->ID, 'h2h_only', true );
@@ -192,7 +192,7 @@ function h2h_meta_box( $post ) {
  * @param integer $post_id The post id.
  * @param object  $post The post object.
  */
-function h2h_save( $post_id, $post ) {
+function sah2h_save( $post_id, $post ) {
 	if ( isset( $_POST['h2h_meta_box_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['h2h_meta_box_nonce'] ) ), 'h2h_meta_box' ) ) {
 		update_post_meta( $post_id, 'h2h_priority', sp_array_value( $_POST, 'h2h_priority', '' ) );
 		update_post_meta( $post_id, 'h2h_order', sp_array_value( $_POST, 'h2h_order', '' ) );
@@ -203,7 +203,7 @@ function h2h_save( $post_id, $post ) {
 /**
  * Enqueue needed scripts to the admin site.
  */
-function h2h_admin_enqueue_assets() {
+function sah2h_admin_enqueue_assets() {
 	$current_screen = get_current_screen();
 	if ( $current_screen && 'sp_column' === $current_screen->id ) {
 		wp_enqueue_script( 'h2h-admin', plugin_dir_url( __FILE__ ) . 'assets/js/h2h-admin.js', array(), '1.0.0', true );
