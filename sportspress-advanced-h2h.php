@@ -193,7 +193,8 @@ function sah2h_meta_box( $post ) {
  * @param object  $post The post object.
  */
 function sah2h_save( $post_id, $post ) {
-	if ( isset( $_POST['h2h_meta_box_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['h2h_meta_box_nonce'] ) ), 'h2h_meta_box' ) ) {
+	// Check if SportsPress is installed and activated ( function_exists('sp_array_value') ) and also check that the genuine nonce was used
+	if ( function_exists('sp_array_value') && isset( $_POST['h2h_meta_box_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['h2h_meta_box_nonce'] ) ), 'h2h_meta_box' ) ) {
 		update_post_meta( $post_id, 'h2h_priority', sp_array_value( $_POST, 'h2h_priority', '' ) );
 		update_post_meta( $post_id, 'h2h_order', sp_array_value( $_POST, 'h2h_order', '' ) );
 		update_post_meta( $post_id, 'h2h_only', sp_array_value( $_POST, 'h2h_only', null, 'key' ) );
