@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: SportsPress Advanced H2H
+ * Plugin Name: Advanced H2H for SportsPress
  * Description: Give your league managers the option to use more advanced head to head criteria for tiebreaks.
  * Version: 1.0.0
  * Author: Savvas
@@ -10,7 +10,7 @@
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl.html
  *
- * @package sportspress-advanced-h2h
+ * @package advanced-h2h-for-sportspress
  * @category Core
  * @author savvasha
  */
@@ -96,7 +96,7 @@ function sah2h_add_settings( $settings ) {
 						$h2h_criteria[ $h2h_priority ]            = $stat;
 						$h2h_criteria[ $h2h_priority ]->h2h_order = sah2h_get_post_order( $stat->ID );
 						if ( 1 === intval( $h2h_only ) ) {
-							$h2h_criteria[ $h2h_priority ]->h2h_only = esc_html__( 'Head to Head ', 'sportspress-advanced-h2h' );
+							$h2h_criteria[ $h2h_priority ]->h2h_only = esc_html__( 'Head to Head ', 'advanced-h2h-for-sportspress' );
 						}
 					}
 				}
@@ -138,7 +138,7 @@ function sah2h_get_post_order( $post_id ) {
  * Add meta boxes.
  */
 function sah2h_add_meta_boxes() {
-	add_meta_box( 'h2h_h2hdiv', __( 'Advanced Head to Head', 'sportspress-advanced-h2h' ), 'sah2h_meta_box', 'sp_column', 'side', 'low' );
+	add_meta_box( 'h2h_h2hdiv', __( 'Advanced Head to Head', 'advanced-h2h-for-sportspress' ), 'sah2h_meta_box', 'sp_column', 'side', 'low' );
 }
 
 /**
@@ -152,7 +152,7 @@ function sah2h_meta_box( $post ) {
 	$h2h_only     = get_post_meta( $post->ID, 'h2h_only', true );
 	wp_nonce_field( 'h2h_meta_box', 'h2h_meta_box_nonce' );
 	?>
-	<p><strong><?php esc_html_e( 'H2H Sort Order', 'sportspress-advanced-h2h' ); ?></strong></p>
+	<p><strong><?php esc_html_e( 'H2H Sort Order', 'advanced-h2h-for-sportspress' ); ?></strong></p>
 	<p class="h2h-order-selector">
 		<select name="h2h_priority">
 			<?php
@@ -180,7 +180,7 @@ function sah2h_meta_box( $post ) {
 		<br/>
 		<label>
 			<input type="checkbox" name="h2h_only" value="1" <?php checked( $h2h_only, 1 ); ?> />
-			<?php esc_attr_e( 'H2H Only', 'sportspress-advanced-h2h' ); ?>
+			<?php esc_attr_e( 'H2H Only', 'advanced-h2h-for-sportspress' ); ?>
 		</label>
 	</p>
 	<?php

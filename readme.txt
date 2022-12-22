@@ -1,4 +1,4 @@
-=== SportsPress Advanced Head 2 Head ===
+=== Advanced H2H for SportsPress ===
 Contributors: savvasha
 Tags: sportspress, league, table, season, events, teams, data, fixtures, h2h, head to head
 Requires at least: 5.3
@@ -14,7 +14,7 @@ This plugin is an extension for [SportsPress](https://wordpress.org/plugins/spor
 
 == Installation ==
 
-1.  Install and activate SportsPress Advanced Head 2 Head plugin
+1.  Install and activate Advanced H2H for SportsPress plugin
 2.  Select `Head to Head` ranking at `SportsPress->Settings->Teams->Tiebreaker`
 2.  Go to `SportsPress->Configure->Table Columns` and define the H2H priorities as you wish
 3.  Check at `SportsPress->Settings->Teams->Tiebreaker` that the criteria priority and order is correct
