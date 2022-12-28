@@ -20,6 +20,15 @@ jQuery( document ).ready(
 
 		// Trigger order selector.
 		$( ".h2h-order-selector select:first" ).change();
+		
+		// Sortable lists.
+		$( ".sah2h-sortable-list" ).sortable(
+			{
+				handle: ".sah2h-item-handle",
+				placeholder: "sah2h-item-placeholder",
+				connectWith: ".sah2h-connected-list"
+			}
+		);
 
 	}
 );

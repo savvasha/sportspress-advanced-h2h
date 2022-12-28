@@ -1,0 +1,127 @@
+/* Sortable lists */
+.sah2h-sortable-list {
+	margin: 0;
+	overflow: hidden;
+	padding-top: 5px;
+	min-height: 50px;
+}
+
+.sah2h-sortable-list li {
+	float: left;
+	clear: both;
+	max-width: 382px;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.sah2h-sortable-list .sah2h-item-float + .sah2h-item-float {
+	padding-right: 0;
+}
+
+.sah2h-item-bar {
+	clear: both;
+	line-height: 1.5em;
+	position: relative;
+	margin: 9px 0 0;
+}
+
+.sah2h-item-bar .sah2h-item-handle {
+	background: #fafafa;
+	color: #23282d;
+	border: 1px solid #dfdfdf;
+	position: relative;
+	padding: 10px 15px;
+	height: auto;
+	min-height: 20px;
+	line-height: 30px;
+	overflow: hidden;
+	word-wrap: break-word;
+}
+
+.sah2h-item-bar .sah2h-item-handle:hover {
+	border-color: #999;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.1);
+	box-shadow: 0 1px 2px rgba(0,0,0,.1);
+}
+
+.sah2h-item-bar .sah2h-item-title {
+	font-size: 13px;
+	font-weight: 600;
+	line-height: 20px;
+	display: block;
+	margin-right: 13em;
+}
+
+.sah2h-item-settings {
+	display: block;
+	padding: 10px 0 10px 15px;
+	position: relative;
+	z-index: 10;
+	background: #fff;
+	border: 1px solid #e5e5e5;
+	border-top: none;
+	-webkit-box-shadow: 0 1px 1px rgba(0,0,0,.04);
+	box-shadow: 0 1px 1px rgba(0,0,0,.04);
+}
+
+.js .sah2h-item-handle {
+	cursor: move;
+}
+
+.sah2h-sortable-list .sah2h-item-placeholder {
+	border: 1px dashed #b4b9be;
+	margin: 9px auto 6px;
+	height: 42px;
+}
+
+/* Toggle switches */
+.sah2h-toggle-switch {
+	display: none !important;
+}
+
+.sah2h-toggle-switch + label {
+	width: 32px;
+	height: 16px;
+	border-radius: 16px;
+	position: absolute;
+	right: 12px;
+	top: 13px;
+}
+
+.sah2h-toggle-switch + label:before,
+.sah2h-toggle-switch + label:after {
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	content: "";
+}
+
+.sah2h-toggle-switch + label:before {
+	right: 1px;
+	background-color: #e4e4e4;
+	border-radius: 16px;
+	transition: background 0.4s;
+}
+
+.sah2h-toggle-switch + label:after {
+	width: 16px;
+	background-color: #fff;
+	border-radius: 100%;
+	-webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+	transition: margin 0.4s;
+}
+
+.sah2h-toggle-switch:checked + label:before {
+  background-color: #00a0d2;
+}
+
+.sah2h-toggle-switch:checked + label:after {
+  margin-left: 16px;
+}
+
+.sah2h-toggle-switch:checked + label:hover:before {
+  background-color: #00b9eb;
+}

@@ -34,11 +34,24 @@ if ( ! defined( 'SAH2H_PLUGIN_URL' ) ) {
 
 // Include required files.
 if ( 'h2h' === get_option( 'sportspress_table_tiebreaker', 'none' ) ) {
-	// load needed class functions.
+	// Load needed class functions for the enhanced League Table.
 	include SAH2H_PLUGIN_DIR . 'includes/class-sah2h-league-table.php';
 	// Override SportsPress templates.
 	add_filter( 'sportspress_locate_template', 'sah2h_shortcode_override', 10, 3 );
 }
+
+// Load needed class functions for the Tiebreak Criteria.
+include SAH2H_PLUGIN_DIR . 'includes/class-sah2h-tiebreak-criteria.php';
+	
+// Filters.
+add_filter( 'sportspress_table_options', 'sah2h_add_settings' );
+add_action( 'init', 'sah2h_register_post_type' );
+
+// Actions.
+add_action( 'add_meta_boxes', 'sah2h_add_meta_boxes', 30 );
+add_action( 'sportspress_process_sp_column_meta', 'sah2h_save', 15, 2 );
+add_action( 'admin_enqueue_scripts', 'sah2h_admin_enqueue_assets', -99 );
+add_action( 'add_meta_boxes_sah2h_criteria', 'adding_custom_meta_boxes' );
 
 /**
  * Shortcode override
@@ -58,14 +71,6 @@ function sah2h_shortcode_override( $template = null, $template_name = null, $tem
 	return $template;
 }
 
-// Filters.
-add_filter( 'sportspress_table_options', 'sah2h_add_settings' );
-
-// Actions.
-add_action( 'add_meta_boxes', 'sah2h_add_meta_boxes', 30 );
-add_action( 'sportspress_process_sp_column_meta', 'sah2h_save', 15, 2 );
-add_action( 'admin_enqueue_scripts', 'sah2h_admin_enqueue_assets', -99 );
-
 /**
  * Add settings.
  *
@@ -73,8 +78,8 @@ add_action( 'admin_enqueue_scripts', 'sah2h_admin_enqueue_assets', -99 );
  * @return array
  */
 function sah2h_add_settings( $settings ) {
-	foreach ( $settings as $key => $setting ) {
-		if ( 'h2h' === get_option( 'sportspress_table_tiebreaker', 'none' ) ) {
+	if ( 'h2h' === get_option( 'sportspress_table_tiebreaker', 'none' ) ) {
+		foreach ( $settings as $key => $setting ) {
 			if ( 'sportspress_table_tiebreaker' === $setting['id'] ) {
 				$setting['desc']  = '<div id="h2h-criteria">';
 				$setting['desc'] .= '<strong>Head to Head Criteria:</strong><br/>';
@@ -108,8 +113,8 @@ function sah2h_add_settings( $settings ) {
 				}
 				$setting['desc'] .= '</div>';
 			}
+			$newsettings[ $key ] = $setting;
 		}
-		$newsettings[ $key ] = $setting;
 	}
 
 	return $newsettings;
@@ -206,7 +211,64 @@ function sah2h_save( $post_id, $post ) {
  */
 function sah2h_admin_enqueue_assets() {
 	$current_screen = get_current_screen();
-	if ( $current_screen && 'sp_column' === $current_screen->id ) {
-		wp_enqueue_script( 'sah2h-admin', plugin_dir_url( __FILE__ ) . 'assets/js/sah2h-admin.js', array(), '1.0.0', true );
+	if ( $current_screen && in_array( $current_screen->id, array( 'sp_column', 'sah2h_criteria' ) ) ) {
+		wp_enqueue_script( 'sah2h-admin', plugin_dir_url( __FILE__ ) . 'assets/js/sah2h-admin.js', array(), '1.5.0', true );
+		wp_enqueue_style( 'sah2h-admin', plugin_dir_url( __FILE__ ) . 'assets/css/sah2h-admin.css', array(), '1.5.0', 'all' );
 	}
+}
+
+/**
+ * Register calendars post type
+ */
+function sah2h_register_post_type() {
+	register_post_type(
+		'sah2h_criteria',
+			array(
+				'labels'                => array(
+					'name'               => esc_attr__( 'Tiebreak Criteria', 'advanced-h2h-for-sportspress' ),
+					'singular_name'      => esc_attr__( 'Tiebreak Criterion', 'advanced-h2h-for-sportspress' ),
+					'add_new_item'       => esc_attr__( 'Add New Criterion', 'advanced-h2h-for-sportspress' ),
+					'edit_item'          => esc_attr__( 'Edit Criterion', 'advanced-h2h-for-sportspress' ),
+					'new_item'           => esc_attr__( 'New', 'advanced-h2h-for-sportspress' ),
+					'view_item'          => esc_attr__( 'View Criterion', 'advanced-h2h-for-sportspress' ),
+					'search_items'       => esc_attr__( 'Search', 'advanced-h2h-for-sportspress' ),
+					'not_found'          => esc_attr__( 'No results found.', 'advanced-h2h-for-sportspress' ),
+					'not_found_in_trash' => esc_attr__( 'No results found.', 'advanced-h2h-for-sportspress' ),
+				),
+				'public'                => true,
+				'show_ui'               => true,
+				'capability_type'       => 'post',
+				'map_meta_cap'          => true,
+				'publicly_queryable'    => true,
+				'exclude_from_search'   => false,
+				'hierarchical'          => false,
+				'rewrite' 				=> [ 'slug' => 'sah2h_criteria', 'with_front' => true ],
+				'menu_icon' 			=> 'dashicons-editor-ol',
+				'supports'              => array( 'title' ),
+				'has_archive'           => false,
+				'show_in_nav_menus'     => true,
+				'show_in_menu'          => 'edit.php?post_type=sp_team',
+				'show_in_admin_bar'     => true,
+				'show_in_rest'          => false,
+			)
+	);
+}
+
+function adding_custom_meta_boxes( $post ) {
+    add_meta_box( 
+        'sah2h-regular-order-meta-box',
+        esc_attr__( 'Regular Order', 'advanced-h2h-for-sportspress' ),
+        'SAH2H_Tiebreak_Criteria::regular_order_output',
+        'sah2h_criteria',
+        'normal',
+        'high'
+    );
+	 add_meta_box( 
+        'sah2h-tiebreak-order-meta-box',
+        esc_attr__( 'Tiebreak Order', 'advanced-h2h-for-sportspress' ),
+        'SAH2H_Tiebreak_Criteria::tiebreak_order_output',
+        'sah2h_criteria',
+        'normal',
+        'high'
+    );
 }
