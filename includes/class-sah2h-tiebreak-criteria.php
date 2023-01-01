@@ -41,8 +41,10 @@ class SAH2H_Tiebreak_Criteria {
 							<input type="hidden" name="sah2h_column_order[]" value="">
 						</div>
 						
+						<input class="sah2h-h2honly-checkbox" type="checkbox" name="" id="sah2h_h2honly_<?php echo esc_attr( $column->post_name ); ?>" value="1">
+						<label for="sah2h_h2honly_<?php echo esc_attr( $column->post_name ); ?>">H2H Only</label>
 						<input type="hidden" name="sportspress_<?php echo esc_attr( $column->post_name ); ?>_visibility[]" value="0">
-						<input class="sah2h-toggle-switch" type="checkbox" name="sportspress_<?php echo esc_attr( $column->post_name ); ?>_visibility[]" id="" value="1">
+						<input class="sah2h-toggle-switch" type="checkbox" name="sportspress_<?php echo esc_attr( $column->post_name ); ?>_visibility[]" id="sah2h_column_show_<?php echo esc_attr( $column->post_name ); ?>" value="1">
 						<label for="sah2h_column_show_<?php echo esc_attr( $column->post_name ); ?>"></label>
 					</div>
 				</li>				

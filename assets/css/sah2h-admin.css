@@ -125,3 +125,20 @@
 .sah2h-toggle-switch:checked + label:hover:before {
   background-color: #00b9eb;
 }
+
+.sah2h-h2honly-checkbox {
+	/*width: 32px;
+	height: 16px;
+	border-radius: 16px;*/
+	position: absolute;
+	right: 54px;
+	top: 17px;
+}
+.sah2h-h2honly-checkbox + label {
+	/*width: 32px;
+	height: 16px;
+	border-radius: 16px;*/
+	position: absolute;
+	right: 80px;
+	top: 11px;
+}
