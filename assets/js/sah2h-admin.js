@@ -29,6 +29,17 @@ jQuery( document ).ready(
 				connectWith: ".sah2h-connected-list"
 			}
 		);
+		
+		// Tiebreak Criteria order selector.
+		$( ".sah2h-toggle-switch" ).change(
+			function() {
+				if ($(this).is(':checked')) {
+					$( this ).siblings().prop( "disabled", false );
+				} else {
+					$( this ).siblings().prop( "disabled", true );
+				}
+			}
+		);
 
 	}
 );

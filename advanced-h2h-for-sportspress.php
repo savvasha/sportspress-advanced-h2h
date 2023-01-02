@@ -51,7 +51,8 @@ add_action( 'init', 'sah2h_register_post_type' );
 add_action( 'add_meta_boxes', 'sah2h_add_meta_boxes', 30 );
 add_action( 'sportspress_process_sp_column_meta', 'sah2h_save', 15, 2 );
 add_action( 'admin_enqueue_scripts', 'sah2h_admin_enqueue_assets', -99 );
-add_action( 'add_meta_boxes_sah2h_criteria', 'adding_custom_meta_boxes' );
+add_action( 'add_meta_boxes_sah2h_criteria', 'sah2h_adding_custom_meta_boxes' );
+add_action( 'save_post_sah2h_criteria', 'sah2h_criteria_save_meta' );
 
 /**
  * Shortcode override
@@ -254,7 +255,7 @@ function sah2h_register_post_type() {
 	);
 }
 
-function adding_custom_meta_boxes( $post ) {
+function sah2h_adding_custom_meta_boxes( $post ) {
     add_meta_box( 
         'sah2h-regular-order-meta-box',
         esc_attr__( 'Regular Order', 'advanced-h2h-for-sportspress' ),
@@ -271,4 +272,29 @@ function adding_custom_meta_boxes( $post ) {
         'normal',
         'high'
     );
+}
+
+function sah2h_criteria_save_meta( $post_id ) {
+
+	if( !isset( $_POST['sah2h_regular_order_nonce'] ) || !wp_verify_nonce( $_POST['sah2h_regular_order_nonce'], 'sah2h_save_custom_meta') ) {
+		return;
+	}
+	
+	if( !isset( $_POST['sah2h_tiebreak_order_nonce'] ) || !wp_verify_nonce( $_POST['sah2h_tiebreak_order_nonce'], 'sah2h_save_custom_meta') ) {
+		return;
+	}
+
+	// Check the logged in user has permission to edit this post
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+	
+	if ( isset( $_POST['sah2h_column_order'] ) ) {
+		update_post_meta( $post_id, 'sah2h_column_order', sp_array_value( $_POST, 'sah2h_column_order', array(), 'text' ) );
+	}
+	
+	if ( isset( $_POST['sah2h_tiebreak_order'] ) ) {
+		update_post_meta( $post_id, 'sah2h_tiebreak_order', sp_array_value( $_POST, 'sah2h_tiebreak_order', array(), 'text' ) );
+	}
+
 }
