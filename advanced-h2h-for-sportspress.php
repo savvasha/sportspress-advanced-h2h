@@ -38,8 +38,6 @@ if ( ! defined( 'SAH2H_PLUGIN_URL' ) ) {
 add_filter( 'sportspress_locate_template', 'sah2h_shortcode_override', 10, 3 );
 // Load needed class functions for the Tiebreak Criteria.
 require SAH2H_PLUGIN_DIR . 'includes/class-sah2h-tiebreak-criteria.php';
-// Load needed class functions for the enhanced League Table.
-require SAH2H_PLUGIN_DIR . 'includes/class-sah2h-league-table.php';
 
 // Filters.
 add_action( 'init', 'sah2h_register_post_type' );
@@ -50,6 +48,15 @@ add_action( 'sportspress_process_sp_table_meta', 'sah2h_table_meta_box_save', 15
 add_action( 'admin_enqueue_scripts', 'sah2h_admin_enqueue_assets', -99 );
 add_action( 'add_meta_boxes_sah2h_criteria', 'sah2h_adding_custom_meta_boxes' );
 add_action( 'save_post_sah2h_criteria', 'sah2h_criteria_save_meta' );
+add_action( 'plugins_loaded', 'sah2h_sportspress_plugin_override' );
+
+/**
+ * Make sure that all plugins are loaded before extend SP_League_Table Class.
+ */
+function sah2h_sportspress_plugin_override() {
+	// Load needed class functions for the enhanced League Table.
+	require SAH2H_PLUGIN_DIR . 'includes/class-sah2h-league-table.php';
+}
 
 /**
  * Shortcode override
