@@ -11,11 +11,6 @@
  * @author      Savvas
  */
 
-// Exit if SportsPress is not installed and activated.
-if ( ! class_exists( 'SP_League_Table' ) ) {
-	exit;
-}
-
 /**
  * SAH2H League Table Class
  *

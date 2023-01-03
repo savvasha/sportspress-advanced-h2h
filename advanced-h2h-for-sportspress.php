@@ -54,8 +54,11 @@ add_action( 'plugins_loaded', 'sah2h_sportspress_plugin_override' );
  * Make sure that all plugins are loaded before extend SP_League_Table Class.
  */
 function sah2h_sportspress_plugin_override() {
-	// Load needed class functions for the enhanced League Table.
-	require SAH2H_PLUGIN_DIR . 'includes/class-sah2h-league-table.php';
+	// Exit if SportsPress is not installed and activated.
+	if ( class_exists( 'SP_League_Table' ) ) {
+		// Load needed class functions for the enhanced League Table.
+		require SAH2H_PLUGIN_DIR . 'includes/class-sah2h-league-table.php';
+	}	
 }
 
 /**
