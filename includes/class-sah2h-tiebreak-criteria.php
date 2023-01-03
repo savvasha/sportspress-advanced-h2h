@@ -5,7 +5,7 @@
  * An Advanced Head to Head League Table Tiebreak Criteria Class.
  *
  * @class       SAH2H_Tiebreak_Criteria
- * @version     1.5.0
+ * @version     2.0.0
  * @package     SAH2H/Classes
  * @category    Class
  * @author      Savvas

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Advanced H2H for SportsPress
  * Description: Give your league managers the option to use more advanced head to head criteria for tiebreaks.
- * Version: 1.0.0
+ * Version: 2.0.0
  * Author: Savvas
  * Author URI: https://profiles.wordpress.org/savvasha/
  * Requires at least: 5.3

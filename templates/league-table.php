@@ -5,7 +5,7 @@
  *
  * @author      ThemeBoy & savvasha
  * @package     Templates
- * @version   2.7
+ * @version     2.7
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

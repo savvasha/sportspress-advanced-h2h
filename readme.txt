@@ -1,23 +1,25 @@
 === Advanced H2H for SportsPress ===
 Contributors: savvasha
-Tags: sportspress, league, table, season, events, teams, data, fixtures, h2h, head to head
+Tags: sportspress, league, table, season, events, teams, data, fixtures, h2h, head to head, sorting
 Requires at least: 5.3
 Tested up to: 6.1
-Stable tag: 1.0.0
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 == Description ==
 
-This plugin is an extension for [SportsPress](https://wordpress.org/plugins/sportspress/). Give your league managers the option to use more advanced h2h criteria.
+This plugin is an extension for [SportsPress](https://wordpress.org/plugins/sportspress/). 
+
+Give your league managers the option to use more advanced Sorting Criteria for your League Tables.
+Now is possible to select different Sorting Criteria for each League Table!
 
 
 == Installation ==
 
-1.  Install and activate Advanced H2H for SportsPress plugin
-2.  Select `Head to Head` ranking at `SportsPress->Settings->Teams->Tiebreaker`
-2.  Go to `SportsPress->Configure->Table Columns` and define the H2H priorities as you wish
-3.  Check at `SportsPress->Settings->Teams->Tiebreaker` that the criteria priority and order is correct
+1.  Install and activate Advanced H2H for SportsPress plugin.
+2.  Create your own Sorting Criterion at `SportsPress->Teams->Sorting Criteria`.
+3.  Select your prefered Sorting Criterion for your League Table 
 4.  Enjoy!
 
 = Credits =
@@ -26,12 +28,18 @@ This plugin is an extension for [SportsPress](https://wordpress.org/plugins/spor
 
 == Screenshots ==
 
-1.  "Normal" Order priorities (Pts, GD, F) i.e. Premier League
-2.  Pts are also set as H2H first order criteria
-3.  If two or more teams are tied, the ranking will check first the H2H team points and next the H2H Away goals scored (i.e. Premier League).
-4.  Head to Head Tiebreak Criteria based on Bundesliga league rules.
+1.  The new CPT Sorting Criteria at SportsPress Teams Menu
+2.  "Regular" Order priorities (Pts, GD, F) i.e. Premier League
+3.  Tiebreak Order priorities (Pts, Goal Away) i.e. Premier League
+4.  Sorting Criteria Summary i.e. Premier League
+5.  Selection of Sorting Criterion at your League Table Edit Page.
 
 == Changelog ==
+
+= 2.0.0 =
+
+* NEW: Tiebreak Criteria Custom Post Type (see screenshots)
+* NEW: Ability to choose for each League Table which ordering criteria to use! (see screenshots)
 
 = 1.0.0 =
 

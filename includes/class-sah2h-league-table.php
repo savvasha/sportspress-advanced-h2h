@@ -5,7 +5,7 @@
  * An Advanced Head to Head League Table Class based on SportsPress League Table Class.
  *
  * @class       SAH2H_League_Table
- * @version     1.0.0
+ * @version     2.0.0
  * @package     SAH2H/Classes
  * @category    Class
  * @author      Savvas
