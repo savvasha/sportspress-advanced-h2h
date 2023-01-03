@@ -38,7 +38,7 @@ Now is possible to select different Sorting Criteria for each League Table!
 
 = 2.0.0 =
 
-* NEW: Tiebreak Criteria Custom Post Type (see screenshots)
+* NEW: Sorting Criteria Custom Post Type (see screenshots)
 * NEW: Ability to choose for each League Table which ordering criteria to use! (see screenshots)
 
 = 1.0.0 =
