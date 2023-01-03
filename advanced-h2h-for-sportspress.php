@@ -135,8 +135,8 @@ function sah2h_register_post_type() {
 		'sah2h_criteria',
 		array(
 			'labels'              => array(
-				'name'               => esc_attr__( 'Tiebreak Criteria', 'advanced-h2h-for-sportspress' ),
-				'singular_name'      => esc_attr__( 'Tiebreak Criterion', 'advanced-h2h-for-sportspress' ),
+				'name'               => esc_attr__( 'Sorting Criteria', 'advanced-h2h-for-sportspress' ),
+				'singular_name'      => esc_attr__( 'Sorting Criterion', 'advanced-h2h-for-sportspress' ),
 				'add_new_item'       => esc_attr__( 'Add New Criterion', 'advanced-h2h-for-sportspress' ),
 				'edit_item'          => esc_attr__( 'Edit Criterion', 'advanced-h2h-for-sportspress' ),
 				'new_item'           => esc_attr__( 'New', 'advanced-h2h-for-sportspress' ),
