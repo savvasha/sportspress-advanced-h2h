@@ -26,8 +26,11 @@ class SAH2H_League_Table extends SP_League_Table {
 	/** @var array The sort h2h priorities array. */
 	public $h2h_priorities;
 
-	/** @var array Temporary save the full table stats for future h2h use   */
+	/** @var array Temporary save the full table stats for future h2h use.   */
 	public $temp_merged = array();
+
+	/** @var string The advanced sorting criteria.   */
+	public $h2h_criteria;
 
 	/**
 	 * Returns formatted data
@@ -630,8 +633,23 @@ endif;
 		$stats = get_posts( $args );
 
 		$columns              = array();
+		$sah2h_criterion      = get_page_by_path( $this->h2h_criteria, OBJECT, 'sah2h_criteria' );
 		$this->priorities     = array();
+		$temp_priorites       = get_post_meta( $sah2h_criterion->ID, 'sah2h_column_order', true );
 		$this->h2h_priorities = array();
+		$temp_h2h_priorites   = get_post_meta( $sah2h_criterion->ID, 'sah2h_tiebreak_order', true );
+
+		foreach ( $temp_priorites as $temp_priority ) {
+			if ( isset( $temp_priority['order'] ) ) {
+				$this->priorities[] = $temp_priority;
+			}
+		}
+
+		foreach ( $temp_h2h_priorites as $temp_h2h_priority ) {
+			if ( isset( $temp_h2h_priority['order'] ) ) {
+				$this->h2h_priorities[] = $temp_h2h_priority;
+			}
+		}
 
 		foreach ( $stats as $stat ) :
 
@@ -645,32 +663,7 @@ endif;
 			// Add column name to columns.
 			$columns[ $stat->post_name ] = $stat->post_title;
 
-			// Add order to priorities if priority is set and does not exist in array already.
-			$priority = sp_array_value( sp_array_value( $meta, 'sp_priority', array() ), 0, 0 );
-			if ( $priority && ! array_key_exists( $priority, $this->priorities ) ) :
-				$this->priorities[ $priority ] = array(
-					'column' => $stat->post_name,
-					'order'  => sp_array_value( sp_array_value( $meta, 'sp_order', array() ), 0, 'DESC' ),
-				);
-			endif;
-
-			// Add order to h2h priorities if h2h priority is set and does not exist in array already.
-			$h2h_priority = sp_array_value( sp_array_value( $meta, 'h2h_priority', array() ), 0, 0 );
-			if ( $h2h_priority && ! array_key_exists( $h2h_priority, $this->h2h_priorities ) ) :
-				$this->h2h_priorities[ $h2h_priority ] = array(
-					'column'   => $stat->post_name,
-					'order'    => sp_array_value( sp_array_value( $meta, 'h2h_order', array() ), 0, 'DESC' ),
-					'h2h_only' => sp_array_value( sp_array_value( $meta, 'h2h_only', array() ), 0, '' ),
-				);
-			endif;
-
 		endforeach;
-
-		// Sort priorities in descending order.
-		ksort( $this->priorities );
-
-		// Sort h2h priorities in descending order.
-		ksort( $this->h2h_priorities );
 
 		// Initialize games back column variable.
 		$gb_column = null;
@@ -802,7 +795,7 @@ endif;
 		if ( ! $is_main_loop ) {
 			// Check the h2h priorities if are h2h_only.
 			foreach ( $this->h2h_priorities as $temp_priority ) {
-				if ( '' == $temp_priority['h2h_only'] ) {
+				if ( isset( $temp_priority['h2h_only'] ) && '' == $temp_priority['h2h_only'] ) {
 					// If not replace the current h2h stat data with the full (temporary) stat data.
 					foreach ( $team_ids as $temp_team_id ) {
 						$merged[ $temp_team_id ][ $temp_priority['column'] ] = $this->temp_merged[ $temp_team_id ][ $temp_priority['column'] ];
@@ -818,7 +811,7 @@ endif;
 		}
 
 		// Head to head table sorting.
-		if ( $is_main_loop && 'h2h' == get_option( 'sportspress_table_tiebreaker', 'none' ) ) {
+		if ( $is_main_loop ) {
 			$order = array();
 
 			foreach ( $this->tiebreakers as $pos => $teams ) {

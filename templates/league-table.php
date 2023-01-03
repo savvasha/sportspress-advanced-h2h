@@ -43,7 +43,14 @@ if ( ! isset( $highlight ) ) {
 	$highlight = get_post_meta( $id, 'sp_highlight', true );
 }
 
-$table = new SAH2H_League_Table( $id );
+$sah2h_criteria = get_post_meta( $id, 'sah2h_criteria', true );
+
+if ( 'default' !== $sah2h_criteria && '' !== $sah2h_criteria ) {
+	$table               = new SAH2H_League_Table( $id );
+	$table->h2h_criteria = $sah2h_criteria;
+} else {
+	$table = new SP_League_Table( $id );
+}
 
 if ( $show_title && false === $title && $id ) :
 	$caption = $table->caption;
