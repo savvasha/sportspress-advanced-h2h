@@ -5,11 +5,11 @@
  *
  * @author      ThemeBoy & savvasha
  * @package     Templates
- * @version     2.7
+ * @version     2.7.23
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly.
+	exit; // Exit if accessed directly
 }
 
 $defaults = array(
@@ -19,13 +19,13 @@ $defaults = array(
 	'highlight'            => null,
 	'show_full_table_link' => false,
 	'title'                => false,
-	'show_title'           => get_option( 'sportspress_table_show_title', 'yes' ) === 'yes' ? true : false,
-	'show_team_logo'       => get_option( 'sportspress_table_show_logos', 'yes' ) === 'yes' ? true : false,
+	'show_title'           => get_option( 'sportspress_table_show_title', 'yes' ) == 'yes' ? true : false,
+	'show_team_logo'       => get_option( 'sportspress_table_show_logos', 'yes' ) == 'yes' ? true : false,
 	'link_posts'           => null,
-	'responsive'           => get_option( 'sportspress_enable_responsive_tables', 'no' ) === 'yes' ? true : false,
-	'sortable'             => get_option( 'sportspress_enable_sortable_tables', 'yes' ) === 'yes' ? true : false,
-	'scrollable'           => get_option( 'sportspress_enable_scrollable_tables', 'yes' ) === 'yes' ? true : false,
-	'paginated'            => get_option( 'sportspress_table_paginated', 'yes' ) === 'yes' ? true : false,
+	'responsive'           => get_option( 'sportspress_enable_responsive_tables', 'no' ) == 'yes' ? true : false,
+	'sortable'             => get_option( 'sportspress_enable_sortable_tables', 'yes' ) == 'yes' ? true : false,
+	'scrollable'           => get_option( 'sportspress_enable_scrollable_tables', 'yes' ) == 'yes' ? true : false,
+	'paginated'            => get_option( 'sportspress_table_paginated', 'yes' ) == 'yes' ? true : false,
 	'rows'                 => get_option( 'sportspress_table_rows', 10 ),
 );
 
@@ -81,7 +81,7 @@ if ( $title ) {
 
 $output .= '<div class="sp-table-wrapper">';
 
-$output .= '<table class="sp-league-table sp-data-table' . ( $sortable ? ' sp-sortable-table' : '' ) . ( $responsive ? ' sp-responsive-table ' . $identifier : '' ) . ( $scrollable ? ' sp-scrollable-table' : '' ) . ( $paginated ? ' sp-paginated-table' : '' ) . '" data-sp-rows="' . $rows . '"><thead><tr>';
+$output .= '<table class="sp-league-table sp-league-table-' . ( $id ) . ' sp-data-table' . ( $sortable ? ' sp-sortable-table' : '' ) . ( $responsive ? ' sp-responsive-table ' . $identifier : '' ) . ( $scrollable ? ' sp-scrollable-table' : '' ) . ( $paginated ? ' sp-paginated-table' : '' ) . '" data-sp-rows="' . $rows . '">' . '<thead>' . '<tr>';
 
 $data = $table->data();
 

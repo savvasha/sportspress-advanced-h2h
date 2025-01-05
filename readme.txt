@@ -1,11 +1,13 @@
 === Advanced H2H for SportsPress ===
 Contributors: savvasha
-Tags: sportspress, league, table, season, events, teams, data, fixtures, h2h, head to head, sorting
+Tags: table, h2h, head to head, sorting, sort
 Requires at least: 5.3
-Tested up to: 6.3
-Stable tag: 2.0.2
+Tested up to: 6.7
+Stable tag: 2.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
+
+Give your league managers the option to use more advanced Sorting Criteria for your League Tables.
 
 == Description ==
 
@@ -19,7 +21,7 @@ Now is possible to select different Sorting Criteria for each League Table!
 
 1.  Install and activate Advanced H2H for SportsPress plugin.
 2.  Create your own Sorting Criterion at `SportsPress->Teams->Sorting Criteria`.
-3.  Select your prefered Sorting Criterion for your League Table 
+3.  Select your preferred Sorting Criterion for your League Table 
 4.  Enjoy!
 
 = Credits =
@@ -35,6 +37,10 @@ Now is possible to select different Sorting Criteria for each League Table!
 5.  Selection of Sorting Criterion at your League Table Edit Page.
 
 == Changelog ==
+
+= 2.1.0 =
+
+* UPDATE: Update league-table template to latest version.
 
 = 2.0.2 =
 
