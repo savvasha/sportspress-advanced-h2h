@@ -3,7 +3,7 @@ Contributors: savvasha
 Tags: table, h2h, head to head, sorting, sort
 Requires at least: 5.3
 Tested up to: 6.7
-Stable tag: 2.1.0
+Stable tag: 2.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -37,6 +37,10 @@ Now is possible to select different Sorting Criteria for each League Table!
 5.  Selection of Sorting Criterion at your League Table Edit Page.
 
 == Changelog ==
+
+= 2.1.1 =
+
+* FIX: Highlight team feature is not working.
 
 = 2.1.0 =
 
